@@ -1,0 +1,48 @@
+{{- if .Values.app_config.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: {{ .Release.Name }}-app
+  name: {{ .Release.Name }}-app
+  namespace: {{ .Release.Namespace }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ .Values.app_config.replicaCount }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      io.kompose.service: {{ .Release.Name }}-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: {{ .Release.Name }}-app
+    spec:
+      containers:
+      - name: {{ .Release.Name }}-app
+        {{- if or (.Values.secrets.enabled) (.Values.configmap.enabled) }}
+        env:
+          {{- include "helpers.list-env-variables" . | indent 10 }}
+        {{- end}}
+        image: "{{ .Values.container_registry }}/{{ .Values.app_config.image.repository }}:{{ .Values.app_config.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.app_config.image.pullPolicy }}
+        name: {{ .Release.Name }}-app
+        ports:
+        - containerPort: {{ .Values.app_config.image.port }}
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: {{ .Values.container_registry }}
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+{{- end}}

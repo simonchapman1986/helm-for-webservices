@@ -1,0 +1,20 @@
+{{- if .Values.postgres_config.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+  labels:
+    io.kompose.service: {{ .Release.Name }}-postgres
+  name: {{ .Release.Name }}-postgres
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: "{{ .Values.postgres_config.service.port }}"
+    port: {{ .Values.postgres_config.service.port }}
+    protocol: TCP
+    targetPort: {{ .Values.postgres_config.service.port }}
+  selector:
+    io.kompose.service: {{ .Release.Name }}-postgres
+  sessionAffinity: None
+  type: ClusterIP
+{{- end}}

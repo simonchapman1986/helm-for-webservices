@@ -1,0 +1,19 @@
+{{- if and (eq .Values.postgres_config.enabled true) (eq .Values.postgres_config.pvc true) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    io.kompose.service: {{ .Release.Name }}-postgres-claim
+  name: {{ .Release.Name }}-postgres-claim0
+  namespace: {{ .Release.Namespace }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
+  volumeMode: Filesystem
+{{- end}}

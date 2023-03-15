@@ -1,0 +1,19 @@
+{{- if .Values.app_config.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    io.kompose.service: {{ .Release.Name }}-app
+  name: {{ .Release.Name }}-app
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  - name: "{{ .Values.app_config.service.port }}"
+    port: {{ .Values.app_config.service.port }}
+    protocol: TCP
+    targetPort: {{ .Values.app_config.image.port }}
+  selector:
+    io.kompose.service: {{ .Release.Name }}-app
+  sessionAffinity: None
+  type: ClusterIP
+{{- end}}
