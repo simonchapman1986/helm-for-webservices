@@ -150,9 +150,9 @@ included in the project:
     with a clear title and description against the `main` branch.
 
 **IMPORTANT**: By submitting a patch, you agree to allow the project owners to
-license your work under the terms of the [License](../LICENSE)
+license your work under the terms of the [License](./LICENSE.md)
 
 
 ## License
 
-By contributing your code, you agree to license your contribution under the [License](../LICENSE).
+By contributing your code, you agree to license your contribution under the [License](./LICENSE.md).
