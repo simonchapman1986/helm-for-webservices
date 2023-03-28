@@ -9,7 +9,7 @@
 helm package webservices/ --version=0.0.1
 ```
 
-## Run tests
+## Run
 
 ```sh
 helm show values webservices/ > myapp.yml
